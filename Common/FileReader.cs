@@ -1,14 +1,14 @@
 #nullable enable
 
-using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace _2c2p_test.Common
 {
     public class FileReader
     {
-        public List<string> Contents { get; private set; } = new();
+        private string Content = "";
         private readonly Stream stream;
 
         public FileReader(Stream stream)
@@ -19,16 +19,13 @@ namespace _2c2p_test.Common
         public async Task<bool> Read()
         {
             using var fileReader = new System.IO.StreamReader(this.stream);
-            for (; ; )
-            {
-                var line = await fileReader.ReadLineAsync();
-                if (line == null)
-                {
-                    break;
-                }
-                Contents.Add(line);
-            }
+            Content = await fileReader.ReadToEndAsync();
             return true;
+        }
+
+        public Stream GetReadStream()
+        {
+            return new MemoryStream(Encoding.UTF8.GetBytes(Content));
         }
     }
 }
