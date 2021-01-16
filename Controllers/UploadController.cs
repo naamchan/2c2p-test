@@ -1,7 +1,10 @@
 #nullable enable
+
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using _2c2p_test.Common;
+using _2c2p_test.Common.FileFormat;
 
 namespace _2c2p_test.Controllers
 {
@@ -24,21 +27,19 @@ namespace _2c2p_test.Controllers
                 return BadRequest("Unknown format");
             }
 
-            using var fileReader = new System.IO.StreamReader(file.OpenReadStream());
+            var format = await (new FileFormatConverter(new FileReader(file.OpenReadStream()), new IFileFormat[] {
+                new CSVFormat(),
+                new XMLFormat()
+            })).TryConvert();
 
-            int lineNumber = 1;
-            for (; ; )
+            if (format != null)
             {
-                var line = await fileReader.ReadLineAsync();
-                if (line == null)
-                {
-                    break;
-                }
-
-                System.Console.WriteLine($"{lineNumber}: {line}");
-                lineNumber++;
+                System.Console.WriteLine($"{format.GetType().Name}");
+                return Ok();
             }
-            return Ok();
+
+            System.Console.WriteLine($"Failed");
+            return BadRequest("Unknown format");
         }
     }
 }
