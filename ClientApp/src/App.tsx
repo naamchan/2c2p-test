@@ -22,8 +22,7 @@ function App() {
 
       console.log(uploadRequest.data);
     }catch(e) {
-      alert(JSON.stringify(e.response))
-      alert(e);
+      alert(JSON.stringify(e.response, undefined, 2));
     }
   }
 
