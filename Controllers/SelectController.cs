@@ -1,6 +1,5 @@
 #nullable enable
 
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +16,6 @@ namespace _2c2p_test.Controllers
         [HttpGet("currency/{currencyCode}")]
         public async Task<IActionResult> Currency(string currencyCode)
         {
-            /*
-            var result = await ;
-            return Ok(result.Select((x) => new ResultTransactionModel(x)));
-            */
             List<ResultTransactionModel> result = new();
             await foreach (var model in new TransactionRepository(HttpContext.RequestServices).FetchByCurrencyCode(currencyCode))
             {
