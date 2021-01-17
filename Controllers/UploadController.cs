@@ -39,7 +39,7 @@ namespace _2c2p_test.Controllers
                 return BadRequest("Unknown format");
             }
 
-            bool isSuccess = await (new TransactionRepository(HttpContext.RequestServices, models)).Save();
+            bool isSuccess = await (new TransactionRepository(HttpContext.RequestServices)).Save(models);
 
             return isSuccess ? Ok() : StatusCode(500);
         }
