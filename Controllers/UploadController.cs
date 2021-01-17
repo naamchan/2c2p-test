@@ -29,7 +29,7 @@ namespace _2c2p_test.Controllers
 
             var format = await (new FileFormatConverter(new FileReader(file.OpenReadStream()), new IFileFormat[] {
                 new CSVTransactionModelFormat(),
-                new XMLFormat()
+                new XMLTransactionModelFormat()
             })).TryConvert();
 
             if (format != null)
