@@ -56,6 +56,21 @@ namespace _2c2p_test.Repository
             );
         }
 
+        public IAsyncEnumerable<TransactionModel> FetchByStatus(TransactionModel.TransactionStatus status)
+        {
+            return Fetch("SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `status` = ?status",
+                new MySqlParameter("?status", (int)status)
+            );
+        }
+
+        public IAsyncEnumerable<TransactionModel> FetchByTransactionDate(DateTime start, DateTime end)
+        {
+            return Fetch("SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `transaction_date` BETWEEN ?start AND ?end",
+                new MySqlParameter("?start", start),
+                new MySqlParameter("?end", end)
+            );
+        }
+
         private async IAsyncEnumerable<TransactionModel> Fetch(string queryString, params MySqlParameter[] parameters)
         {
             var mysqlService = GetMySQLService();

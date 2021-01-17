@@ -4,6 +4,8 @@ import "./App.css";
 import SelectByCurrency from "./SelectByCurrency";
 import { TransactionModel } from "./Models/transaction_model";
 import SelectResultTable from "./SelectResultTable";
+import SelectByStatus from "./SelectByStatus";
+import SelectByTransactionDate from "./SelectByTransactionDate";
 
 function App() {
   const [file, setFile] = useState<FileList | null>(null);
@@ -36,9 +38,16 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <input type="file" onChange={(e) => setFile(e.target.files)}></input>
-        <button onClick={upload}>Upload</button>
+        <div className="distinguish-border">
+          <input type="file" onChange={(e) => setFile(e.target.files)}></input>
+          <button onClick={upload}>Upload</button>
+        </div>
         <SelectByCurrency setResult={setSelectResult} setError={setMessage} />
+        <SelectByStatus setResult={setSelectResult} setError={setMessage} />
+        <SelectByTransactionDate
+          setResult={setSelectResult}
+          setError={setMessage}
+        />
         <p>{message}</p>
         <SelectResultTable selectResult={selectResult} />
       </header>
