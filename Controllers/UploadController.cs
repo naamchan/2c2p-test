@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using _2c2p_test.Common;
 using _2c2p_test.Common.FileFormat;
+using _2c2p_test.Model;
 
 namespace _2c2p_test.Controllers
 {
@@ -27,19 +28,19 @@ namespace _2c2p_test.Controllers
                 return BadRequest("Unknown format");
             }
 
-            var format = await (new FileFormatConverter(new FileReader(file.OpenReadStream()), new IFileFormat[] {
+            var models = await (new FileFormatConverter<TransactionModel>(new FileReader(file.OpenReadStream()), new IFileFormatToModel<TransactionModel>[] {
                 new CSVTransactionModelFormat(),
                 new XMLTransactionModelFormat()
             })).TryConvert();
 
-            if (format != null)
+            if (models == null)
             {
-                System.Console.WriteLine($"{format.GetType().Name}");
-                return Ok();
+                return BadRequest("Unknown format");
             }
 
-            System.Console.WriteLine($"Failed");
-            return BadRequest("Unknown format");
+
+
+            return Ok();
         }
     }
 }

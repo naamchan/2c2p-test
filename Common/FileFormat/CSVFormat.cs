@@ -10,12 +10,13 @@ using CsvHelper.Configuration;
 
 namespace _2c2p_test.Common.FileFormat
 {
-    public abstract class CSVFormat<TModel> : IFileFormat
+    public abstract class CSVFormat<TModel> : IFileFormatToModel<TModel>
     {
         public List<TModel> Contents = new();
         public List<(int, string)> parseFailed = new();
+        IEnumerable<TModel> IFileFormatToModel<TModel>.GetContents() => Contents;
 
-        async Task<IFileFormat?> IFileFormat.Parse(Stream readStream)
+        async Task<IFileFormatToModel<TModel>?> IFileFormatToModel<TModel>.Parse(Stream readStream)
         {
             using var textReader = new StreamReader(readStream);
             var csvReader = new CsvReader(textReader, new CsvConfiguration(CultureInfo.InvariantCulture)
