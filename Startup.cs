@@ -1,6 +1,6 @@
+using _2c2p_test.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +22,9 @@ namespace _2c2p_test
         {
 
             services.AddControllersWithViews();
+            services.Add(new ServiceDescriptor(typeof(MySQLService),
+                new MySQLService(Configuration.GetConnectionString("MySQL"))
+            ));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

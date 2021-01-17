@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using _2c2p_test.Common;
 using _2c2p_test.Common.FileFormat;
 using _2c2p_test.Model;
+using _2c2p_test.Repository;
 
 namespace _2c2p_test.Controllers
 {
@@ -38,9 +39,9 @@ namespace _2c2p_test.Controllers
                 return BadRequest("Unknown format");
             }
 
+            bool isSuccess = await (new TransactionRepository(HttpContext.RequestServices, models)).Save();
 
-
-            return Ok();
+            return isSuccess ? Ok() : StatusCode(500);
         }
     }
 }
