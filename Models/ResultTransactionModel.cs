@@ -27,8 +27,6 @@ namespace _2c2p_test.Model
             ID = transactionModel.TransactionID;
             Payment = $"{transactionModel.Amount} {transactionModel.CurrencyCode}";
             Status = ConvertStatusToUnifiedStatus(transactionModel.Status);
-
-            System.Console.WriteLine($"{ID} {Payment} {Status}");
         }
 
         public static string ConvertStatusToUnifiedStatus(TransactionModel.TransactionStatus status)

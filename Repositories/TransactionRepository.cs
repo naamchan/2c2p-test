@@ -40,7 +40,6 @@ namespace _2c2p_test.Repository
                 Append(queryText, model);
             }
             queryText.Append(";");
-            System.Console.WriteLine(queryText.ToString());
 
             await connection.OpenAsync();
             using var command = new MySqlCommand(queryText.ToString(), connection);

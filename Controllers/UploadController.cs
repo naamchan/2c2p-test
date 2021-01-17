@@ -22,8 +22,6 @@ namespace _2c2p_test.Controllers
         [RequestSizeLimit(1048576)]
         public async Task<IActionResult> Post(IFormFile? file)
         {
-            System.Console.WriteLine("Posted");
-
             if (file == null)
             {
                 return BadRequest("Unknown format");
