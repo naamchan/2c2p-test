@@ -1,6 +1,5 @@
 #nullable enable
 
-
 using System.Threading.Tasks;
 using _2c2p_test.Model;
 using _2c2p_test.Model.Factory;
@@ -20,7 +19,12 @@ namespace _2c2p_test.Common.FileFormat
                 csvReader.TryGetField<string>(4, out var status)
             )
             {
-                var model = CSVTransactionModelFactory.Create(transactionID, amount, currencyCode, transactionDate, status);
+                var model = CSVTransactionModelFactory.Create(
+                    transactionID,
+                    amount,
+                    currencyCode,
+                    transactionDate,
+                    status);
                 if (model != null)
                 {
                     return Task.FromResult<TransactionModel?>(model);

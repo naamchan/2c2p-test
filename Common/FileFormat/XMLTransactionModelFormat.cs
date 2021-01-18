@@ -22,7 +22,7 @@ namespace _2c2p_test.Common.FileFormat
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == "Transaction")
                 {
                     var element = XElement.ReadFrom(xmlReader) as XElement;
-                    if (element == null)
+                    if (element is null)
                     {
                         continue;
                     }
@@ -34,7 +34,12 @@ namespace _2c2p_test.Common.FileFormat
                     var currencyCode = paymentDetails?.Element("CurrencyCode")?.Value;
                     var status = element.Element("Status")?.Value;
 
-                    var model = XMLTransactionModelFactory.Create(id, amount, currencyCode, transactionDate, status);
+                    var model = XMLTransactionModelFactory.Create(
+                        id,
+                        amount,
+                        currencyCode,
+                        transactionDate,
+                        status);
                     if (model is null)
                     {
                         failedParse.Add(element.ToString());

@@ -22,19 +22,20 @@ namespace _2c2p_test.Controllers
         [RequestSizeLimit(1048576)]
         public async Task<IActionResult> Post(IFormFile? file)
         {
-            System.Console.WriteLine("Posted");
-
-            if (file == null)
+            if (file is null)
             {
                 return BadRequest("Unknown format");
             }
 
-            var models = await (new FileFormatConverter<TransactionModel>(new FileReader(file.OpenReadStream()), new IFileFormatToModel<TransactionModel>[] {
-                new CSVTransactionModelFormat(),
-                new XMLTransactionModelFormat()
-            })).TryConvert();
+            var models = await (new FileFormatConverter<TransactionModel>(
+                new FileReader(file.OpenReadStream()),
+                new IFileFormatToModel<TransactionModel>[] {
+                    new CSVTransactionModelFormat(),
+                    new XMLTransactionModelFormat()
+                }
+            )).TryConvert();
 
-            if (models == null)
+            if (models is null)
             {
                 return BadRequest("Unknown format");
             }

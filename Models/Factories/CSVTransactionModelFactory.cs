@@ -7,7 +7,12 @@ namespace _2c2p_test.Model.Factory
 {
     public static class CSVTransactionModelFactory
     {
-        public static TransactionModel? Create(string? transactionID, string? amountString, string? currencyCode, string? transactionDateString, string? transactionStatus)
+        public static TransactionModel? Create(
+            string? transactionID,
+            string? amountString,
+            string? currencyCode,
+            string? transactionDateString,
+            string? transactionStatus)
         {
             if (string.IsNullOrEmpty(transactionID))
             {
@@ -30,7 +35,12 @@ namespace _2c2p_test.Model.Factory
                 && status.HasValue
             )
             {
-                return new TransactionModel(transactionID, amount, currencyCode, transactionDate.Value, status.Value);
+                return new TransactionModel(
+                    transactionID,
+                    amount,
+                    currencyCode,
+                    transactionDate.Value,
+                    status.Value);
             }
 
             return null;
