@@ -1,17 +1,37 @@
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace _2c2p_test.Common.FileFormat
 {
-    public class XMLFormat : IFileFormat
+    public abstract class XMLFormat<TModel> : IFileFormat
     {
-        Task<IFileFormat?> IFileFormat.Parse(Stream readStream)
+        private List<TModel>? models;
+
+        async Task<IFileFormat?> IFileFormat.Parse(Stream readStream)
         {
-            //return Task.FromResult<IFileFormat?>(new System.Random().Next() % 2 == 0 ? this : null);
-            return Task.FromResult<IFileFormat?>(null);
+            try
+            {
+                using var xmlReader = XmlReader.Create(readStream, new XmlReaderSettings()
+                {
+                    Async = true
+                });
+                await xmlReader.MoveToContentAsync();
+
+                var (isSuccess, models) = await ParseModel(xmlReader);
+                this.models = models;
+                return isSuccess ? this : null;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
+
+        abstract protected Task<(bool, List<TModel>)> ParseModel(XmlReader reader);
     }
 }
