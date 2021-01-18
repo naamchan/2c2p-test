@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  mysql_2c2p:
+    container_name: mysql_2c2p
+    restart: always
+    image: mysql:5
+    ports:
+      - "3306:3306"
+    networks:
+      - internal
+    environment:
+      MYSQL_ROOT_PASSWORD: "P@ssw0rd"
+      MYSQL_DATABASE: "2c2p_test"
+
+  myadmin_2c2p:
+    container_name: myadmin_2c2p
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    networks:
+      - internal
+    ports:
+      - '8090:80'
+    links:
+      - 'mysql_2c2p:db'
+    depends_on:
+      - mysql_2c2p
+
+networks:
+  internal:
+    name: internal_net
+    driver: bridge
