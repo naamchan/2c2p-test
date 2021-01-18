@@ -26,7 +26,7 @@ namespace _2c2p_test.Common
             }
 
             var remainingTasks = new HashSet<Task<IFileFormat?>>(
-                supportedFormats.Select((x) => x.TryParse(reader.Contents)
+                supportedFormats.Select((x) => x.Parse(reader.GetReadStream())
             ));
 
             while (remainingTasks.Any())

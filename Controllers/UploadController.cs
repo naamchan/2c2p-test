@@ -28,7 +28,7 @@ namespace _2c2p_test.Controllers
             }
 
             var format = await (new FileFormatConverter(new FileReader(file.OpenReadStream()), new IFileFormat[] {
-                new CSVFormat(),
+                new CSVTransactionModelFormat(),
                 new XMLFormat()
             })).TryConvert();
 
