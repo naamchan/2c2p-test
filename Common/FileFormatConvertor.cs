@@ -12,7 +12,9 @@ namespace _2c2p_test.Common
         private readonly FileReader reader;
         private readonly IEnumerable<IFileFormatToModel<TModel>> supportedFormats;
 
-        public FileFormatConverter(FileReader reader, IEnumerable<IFileFormatToModel<TModel>> supportedFormats)
+        public FileFormatConverter(
+            FileReader reader,
+            IEnumerable<IFileFormatToModel<TModel>> supportedFormats)
         {
             this.reader = reader;
             this.supportedFormats = supportedFormats;

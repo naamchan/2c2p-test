@@ -38,8 +38,15 @@ namespace _2c2p_test.Controllers
             return Ok(await Fetch((repository) => repository.FetchByTransactionDate(start, end)));
         }
 
-        private async Task<List<ResultTransactionModel>> Fetch(Func<TransactionRepository, IAsyncEnumerable<TransactionModel>> fetcher)
+        private async Task<List<ResultTransactionModel>> Fetch(
+            Func<TransactionRepository, IAsyncEnumerable<TransactionModel>> fetcher
+        )
         {
+            if (fetcher is null)
+            {
+                throw new ArgumentNullException(nameof(fetcher));
+            }
+
             List<ResultTransactionModel> result = new();
             var repository = new TransactionRepository(HttpContext.RequestServices);
             await foreach (var model in fetcher.Invoke(repository))

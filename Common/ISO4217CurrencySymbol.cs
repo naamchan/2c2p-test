@@ -9,7 +9,8 @@ namespace _2c2p_test.Common
         private static HashSet<string> currencySymbols = new HashSet<string>();
         static ISO4217CurrencySymbol()
         {
-            currencySymbols = new HashSet<string>(CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+            currencySymbols = new HashSet<string>(
+                CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select((x) => new RegionInfo(x.LCID).ISOCurrencySymbol)
                 .Distinct()
             );

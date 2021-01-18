@@ -7,7 +7,12 @@ namespace _2c2p_test.Model.Factory
 {
     public static class XMLTransactionModelFactory
     {
-        public static TransactionModel? Create(string? transactionID, string? amountString, string? currencyCode, string? transactionDateString, string? transactionStatus)
+        public static TransactionModel? Create(
+            string? transactionID,
+            string? amountString,
+            string? currencyCode,
+            string? transactionDateString,
+            string? transactionStatus)
         {
             if (string.IsNullOrEmpty(transactionID))
             {
@@ -35,7 +40,12 @@ namespace _2c2p_test.Model.Factory
                 isAmountParseSuccess
             )
             {
-                return new TransactionModel(transactionID, amount, currencyCode, transactionDate.Value, status.Value);
+                return new TransactionModel(
+                    transactionID,
+                    amount,
+                    currencyCode,
+                    transactionDate.Value,
+                    status.Value);
             }
 
             return null;
@@ -45,7 +55,12 @@ namespace _2c2p_test.Model.Factory
         {
             var format = "yyyy-MM-ddTHH:mm:ss";
 
-            if (DateTime.TryParseExact(transactionDateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out var transactionDate))
+            if (DateTime.TryParseExact(
+                transactionDateString,
+                format,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var transactionDate))
             {
                 return transactionDate;
             }

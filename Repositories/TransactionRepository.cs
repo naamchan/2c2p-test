@@ -24,7 +24,9 @@ namespace _2c2p_test.Repository
             var mysqlService = GetMySQLService();
             using var connection = mysqlService.GetConnection();
 
-            StringBuilder queryText = new("INSERT INTO `transactions` (`id`, `amount`, `currency_code`, `transaction_date`, `status`) VALUES ");
+            StringBuilder queryText = new(
+                "INSERT INTO `transactions` (`id`, `amount`, `currency_code`, `transaction_date`, `status`) VALUES "
+            );
 
             bool wasPrepended = false;
             foreach (var model in models)
@@ -50,27 +52,32 @@ namespace _2c2p_test.Repository
 
         public IAsyncEnumerable<TransactionModel> FetchByCurrencyCode(string currencyCode)
         {
-            return Fetch("SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `currency_code`=?currencyCode",
+            return Fetch(
+                "SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `currency_code`=?currencyCode",
                 new MySqlParameter("?currencyCode", currencyCode)
             );
         }
 
         public IAsyncEnumerable<TransactionModel> FetchByStatus(TransactionModel.TransactionStatus status)
         {
-            return Fetch("SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `status` = ?status",
+            return Fetch(
+                "SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `status` = ?status",
                 new MySqlParameter("?status", (int)status)
             );
         }
 
         public IAsyncEnumerable<TransactionModel> FetchByTransactionDate(DateTime start, DateTime end)
         {
-            return Fetch("SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `transaction_date` BETWEEN ?start AND ?end",
+            return Fetch(
+                "SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `transaction_date` BETWEEN ?start AND ?end",
                 new MySqlParameter("?start", start),
                 new MySqlParameter("?end", end)
             );
         }
 
-        private async IAsyncEnumerable<TransactionModel> Fetch(string queryString, params MySqlParameter[] parameters)
+        private async IAsyncEnumerable<TransactionModel> Fetch(
+            string queryString,
+            params MySqlParameter[] parameters)
         {
             var mysqlService = GetMySQLService();
             using var connection = mysqlService.GetConnection();
@@ -106,7 +113,7 @@ namespace _2c2p_test.Repository
                 .Append("'").Append(MySqlHelper.EscapeString(model.CurrencyCode)).Append("',")
                 .Append("'").Append(model.TransactionDate.ToString("o")).Append("',")
                 .Append("'").Append(((int)model.Status)).Append("'")
-                .Append(")");
+            .Append(")");
         }
 
 
