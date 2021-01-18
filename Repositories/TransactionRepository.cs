@@ -49,32 +49,54 @@ namespace _2c2p_test.Repository
             return true;
         }
 
-        public async Task<IEnumerable<TransactionModel>> FetchByCurrencyCode(string currencyCode)
+        public IAsyncEnumerable<TransactionModel> FetchByCurrencyCode(string currencyCode)
+        {
+            return Fetch("SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `currency_code`=?currencyCode",
+                new MySqlParameter("?currencyCode", currencyCode)
+            );
+        }
+
+        public IAsyncEnumerable<TransactionModel> FetchByStatus(TransactionModel.TransactionStatus status)
+        {
+            return Fetch("SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `status` = ?status",
+                new MySqlParameter("?status", (int)status)
+            );
+        }
+
+        public IAsyncEnumerable<TransactionModel> FetchByTransactionDate(DateTime start, DateTime end)
+        {
+            return Fetch("SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `transaction_date` BETWEEN ?start AND ?end",
+                new MySqlParameter("?start", start),
+                new MySqlParameter("?end", end)
+            );
+        }
+
+        private async IAsyncEnumerable<TransactionModel> Fetch(string queryString, params MySqlParameter[] parameters)
         {
             var mysqlService = GetMySQLService();
             using var connection = mysqlService.GetConnection();
 
-            var queryText = "SELECT `id`, `amount`, `currency_code`, `transaction_date`, `status` FROM `transactions` where `currency_code`=?currencyCode";
-
             await connection.OpenAsync();
-            using var command = new MySqlCommand(queryText.ToString(), connection);
-            command.Parameters.Add(new MySqlParameter("?currencyCode", currencyCode));
+            using var command = new MySqlCommand(queryString, connection);
+            foreach (var param in parameters)
+            {
+                command.Parameters.Add(param);
+            }
 
             using var cursor = await command.ExecuteReaderAsync();
-            List<TransactionModel> models = new();
 
             while (await cursor.ReadAsync())
             {
-                models.Add(new TransactionModel(
+                var model = new TransactionModel(
                     transactionID: Convert.ToString(cursor["id"]) ?? "N/A",
                     amount: Convert.ToDecimal(cursor["amount"]),
                     currencyCode: Convert.ToString(cursor["currency_code"]) ?? "N/A",
                     transactionDate: Convert.ToDateTime(cursor["transaction_date"]),
                     transactionStatus: (TransactionModel.TransactionStatus)Convert.ToInt32(cursor["status"])
-                ));
-            }
+                );
 
-            return models;
+                yield return model;
+            }
         }
 
         private void Append(StringBuilder queryText, TransactionModel model)

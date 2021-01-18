@@ -10,6 +10,8 @@ export default function SelectByCurrency(props: {
   setResult: React.Dispatch<React.SetStateAction<TransactionModel[] | null>>;
   setError: React.Dispatch<React.SetStateAction<string>>;
 }) {
+  const [currency, setCurrency] = useState<string>("USD");
+
   const selectByCurrency = async () => {
     if (currency === null) {
       return;
@@ -39,10 +41,8 @@ export default function SelectByCurrency(props: {
     }
   };
 
-  const [currency, setCurrency] = useState<string>("USD");
-
   return (
-    <div>
+    <div className="distinguish-border">
       <input
         type="text"
         onChange={(e) => setCurrency(e.target.value)}

@@ -26,12 +26,12 @@ namespace _2c2p_test.Model
         {
             ID = transactionModel.TransactionID;
             Payment = $"{transactionModel.Amount} {transactionModel.CurrencyCode}";
-            Status = ConvertStatus(transactionModel.Status);
+            Status = ConvertStatusToUnifiedStatus(transactionModel.Status);
 
             System.Console.WriteLine($"{ID} {Payment} {Status}");
         }
 
-        private string ConvertStatus(TransactionModel.TransactionStatus status)
+        public static string ConvertStatusToUnifiedStatus(TransactionModel.TransactionStatus status)
         {
             switch (status)
             {
@@ -43,6 +43,21 @@ namespace _2c2p_test.Model
                     return "D";
                 default:
                     return "N/A";
+            }
+        }
+
+        public static TransactionModel.TransactionStatus? ConvertUnifiedStatusToStatus(string statusCode)
+        {
+            switch (statusCode)
+            {
+                case "A":
+                    return TransactionModel.TransactionStatus.Approved;
+                case "R":
+                    return TransactionModel.TransactionStatus.Finished;
+                case "D":
+                    return TransactionModel.TransactionStatus.Failed;
+                default:
+                    return null;
             }
         }
     }
